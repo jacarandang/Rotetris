@@ -5,8 +5,8 @@ from time import time, sleep
 
 from random import *
 #CONSTANTS AND GLOBALS
-BSIZE = 15
-BWIDTH = 40
+BSIZE = 16
+BWIDTH = 37
 
 B_L	 = ((0, 0), (1, 0), (2, 0), (2, 1), 2, 3, (255, 0, 0))
 B_RL = ((0, 1), (1, 1), (2, 1), (2, 0), 2, 3, (0, 255, 0))
@@ -24,6 +24,7 @@ WEST  = (0, -1, "left.png")
 EAST  = (0, 1, "right.png")
 D_LIST = [NORTH, EAST, SOUTH, WEST]
 #END
+
 pygame.init()
 pygame.font.init()
 pygame.key.set_repeat(100, 70)
@@ -97,6 +98,7 @@ class Board():
 				if(t[i][j]):
 					self[t.topleft[0]+i][t.topleft[1]+j] = 1
 		self.eq.next_tetrimo()
+		self.line_clear()
 	
 	def is_over(self):
 		for i in xrange(4):
@@ -106,9 +108,58 @@ class Board():
 		return False
 	
 	def line_clear(self):
-		for i in xrange(BSIZE):
-			pass
-	
+		for i in xrange(((BSIZE-4)/2) - 1, -1, -1):
+			lc = True
+			for j in xrange(BSIZE):
+				if not self[i][j]:
+					lc = False
+					break
+			if lc:
+				for j in xrange(i, ((BSIZE-4)/2) - 1):
+					for k in xrange(BSIZE):
+						self[j][k] = self[j+1][k]
+				for j in xrange(BSIZE):
+					self[((BSIZE-4)/2)-1][j] = 0
+
+		for i in xrange(((BSIZE-4)/2) - 1, -1, -1):
+			lc = True
+			for j in xrange(BSIZE):
+				if not self[j][i]:
+					lc = False
+					break
+			if lc:
+				for j in xrange(i, ((BSIZE-4)/2) - 1):
+					for k in xrange(BSIZE):
+						self[k][j] = self[k][j+1]
+				for j in xrange(BSIZE):
+					self[j][((BSIZE-4)/2)-1] = 0
+
+		for i in xrange(((BSIZE+4)/2) , BSIZE):
+			lc = True
+			for j in xrange(BSIZE):
+				if not self[i][j]:
+					lc = False
+					break
+			if lc:
+				for j in xrange(i, ((BSIZE+4)/2) + 1, -1):
+					for k in xrange(BSIZE):
+						self[j][k] = self[j-1][k]
+				for j in xrange(BSIZE):
+					self[((BSIZE+4)/2)][j] = 0
+
+		for i in xrange(((BSIZE+4)/2) , BSIZE):
+			lc = True
+			for j in xrange(BSIZE):
+				if not self[j][i]:
+					lc = False
+					break
+			if lc:
+				for j in xrange(i, ((BSIZE+4)/2) + 1, -1):
+					for k in xrange(BSIZE):
+						self[k][j] = self[k][j-1]
+				for j in xrange(BSIZE):
+					self[j][((BSIZE+4)/2)] = 0
+
 	def rotateL(self):
 		narr = []
 		for i in xrange(BSIZE):
@@ -225,7 +276,7 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 				if(self[i][j]): self.image.fill((100, 100, 100), self.get_cell_rect(i, j))
 				else:
 					if(i >= self.spawn and i < self.spawn+4 and j >= self.spawn and j < self.spawn+4	):
-						self.image.fill((50, 50, 50), self.get_cell_rect(i, j))
+						self.image.fill((100, 50, 50), self.get_cell_rect(i, j))
 					else:
 						self.image.fill((0, 0, 0), self.get_cell_rect(i, j))
 				
@@ -244,7 +295,7 @@ class EventQ():
 		self.alist = []
 		for i in xrange(4):
 			self.alist.append(load_image(D_LIST[i][2], -1))
-			self.alist[i].set_alpha(150)
+			self.alist[i].set_alpha(125)
 		self.arrow = None
 		
 	def next_tetrimo(self):
