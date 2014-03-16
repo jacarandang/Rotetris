@@ -2,8 +2,11 @@ import pygame
 from pygame.locals import *
 
 from time import time, sleep
-
 from random import *
+from os import path
+
+from particle import *
+
 #CONSTANTS AND GLOBALS
 BSIZE = 16
 BWIDTH = 37
@@ -35,7 +38,7 @@ BG.fill((100, 100, 100))
 FONT = pygame.font.Font(None, 30)
 
 def load_image(file, colorkey = None):
-	surf = pygame.image.load(file).convert()
+	surf = pygame.image.load(path.join('resource', file)).convert()
 	if colorkey is not None:
 		if colorkey is -1:
 			colorkey = surf.get_at((0,0))
@@ -253,6 +256,8 @@ class Tetrimo():
 		
 class BoardSprite(Board, pygame.sprite.Sprite):
 
+	overlay = None
+
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
 		Board.__init__(self)
@@ -280,10 +285,15 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 					else:
 						self.image.fill((0, 0, 0), self.get_cell_rect(i, j))
 				
+		count = 0
 		for t in self.tetrimo:
 			for j in xrange(t.w):
 				for i in xrange(t.h):
-					if(t[i][j]): self.image.fill(t.color, self.get_cell_rect(t.topleft[0]+i, t.topleft[1]+j))
+					if(t[i][j]):
+						self.image.fill(t.color, self.get_cell_rect(t.topleft[0]+i, t.topleft[1]+j))
+						if(self.overlay):
+							self.image.blit(self.overlay[count], self.get_cell_rect(t.topleft[0]+i, t.topleft[1]+j))
+							count+=1
 				
 class EventQ():
 
@@ -310,12 +320,19 @@ class EventQ():
 	def move_right(self):
 		self.board.move(D_LIST[D_LIST.index(self.tet.direction) - 1])
 
+o = load_image("overlay.jpg").convert()
+o = pygame.transform.scale(o, (BWIDTH, BWIDTH))
+o.set_alpha(100)
+BoardSprite.overlay = [o, o.copy(), o.copy(), o.copy()]
+		
 allsprite = pygame.sprite.Group()
 board = BoardSprite()
 allsprite.add(board)
 
 eq = EventQ(board)
 eq.next_tetrimo()
+
+e = Emitter((200, 200), (100, 100), SCREEN)
 
 clock = pygame.time.Clock()	
 speed = 1.00
@@ -327,7 +344,7 @@ while(running):
 	if(time() - timer >= 1/speed):
 		timer = time()
 		board.move()
-		# if(randint(0, 100) <= 2):
+		# if(randint(0, 100) <= 50):
 			# print "rotate"
 			# choice([board.rotateL, board.rotateR])()
 	
@@ -337,22 +354,28 @@ while(running):
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			running = False
-		if event.type == KEYDOWN:
+		elif event.type == KEYDOWN:
 			if event.key == K_UP:
 				eq.tet.rotateL()
 			elif event.key == K_DOWN:
-				eq.tet.rotateR()
+				speed = 2.50
 			elif event.key == K_LEFT:
 				eq.move_left()
 			elif event.key == K_RIGHT:
 				eq.move_right()
 			elif event.key == K_SPACE:
 				board.drop()
+				e.emit(100)
+		elif event.type == KEYUP:
+			if event.key == K_DOWN:
+				speed = 1
+
 	allsprite.update()
 			
 	SCREEN.blit(BG, (0, 0))
 	allsprite.draw(SCREEN)
 	SCREEN.blit(eq.tdir, (650, 50))
+	#e.update()
 	SCREEN.blit(eq.arrow, (50, 35))
 	pygame.display.update()
 	
