@@ -5,7 +5,7 @@ from time import time
 from os import path
 
 def load_image(file, colorkey = None):
-	surf = pygame.image.load(path.join('resource', file)).convert()
+	surf = pygame.image.load(path.join('resource', file)).convert_alpha()
 	if colorkey is not None:
 		if colorkey is -1:
 			colorkey = surf.get_at((0,0))
