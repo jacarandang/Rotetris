@@ -4,6 +4,10 @@ from pygame.locals import *
 from time import time
 from os import path
 
+#TEST
+test = False
+#TEST
+
 def load_image(file, colorkey = None):
 	surf = pygame.image.load(path.join('resource', file)).convert_alpha()
 	if colorkey is not None:
@@ -31,8 +35,15 @@ while(running):
 		if event.type == QUIT:
 			running = False
 
-	if(time() - arrow_timer > 1):
+	if(time() - arrow_timer > 1 and not test):
 		arrow_ang += 90
+		arrow_ang %= 360
+		arrowd = pygame.transform.rotate(arrow, arrow_ang)	
+		arrow_rect = arrowd.get_rect()
+		arrow_rect.center = 208, 149
+		arrow_timer = time()
+	elif(test):
+		arrow_ang -= 1
 		arrow_ang %= 360
 		arrowd = pygame.transform.rotate(arrow, arrow_ang)	
 		arrow_rect = arrowd.get_rect()
