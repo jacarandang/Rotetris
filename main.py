@@ -23,7 +23,7 @@ BG =  load_image("title.png")
 arrow = load_image("arrow.png")
 arrowd = arrow.copy()
 arrow_rect = arrow.get_rect()
-arrow_rect.center = 208, 149
+arrow_rect.center = 209, 150
 arrow_timer = time()
 arrow_ang = 0
 
