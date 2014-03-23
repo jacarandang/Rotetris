@@ -27,6 +27,14 @@ def load_image(file, colorkey = None):
 		surf.set_colorkey(colorkey, RLEACCEL)
 	return surf
 		
+def pause():
+	while(True):
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				return
+			elif event.type == KEYDOWN:
+				if event.key == K_p:
+					return
 
 				
 class EventQ():
@@ -97,6 +105,8 @@ while(running):
 				eq.move_right()
 			elif event.key == K_SPACE:
 				board.drop()
+			elif event.key == K_p:
+				pause()
 		elif event.type == KEYUP:
 			if event.key == K_DOWN:
 				speed = 1
