@@ -18,6 +18,8 @@ BG =  load_image("title.png")
 
 arrow = load_image("arrow.png")
 arrowd = arrow.copy()
+arrow_rect = arrow.get_rect()
+arrow_rect.center = 208, 149
 arrow_timer = time()
 arrow_ang = 0
 
@@ -32,11 +34,13 @@ while(running):
 	if(time() - arrow_timer > 1):
 		arrow_ang += 90
 		arrow_ang %= 360
-		arrowd = pygame.transform.rotate(arrow, arrow_ang)
+		arrowd = pygame.transform.rotate(arrow, arrow_ang)	
+		arrow_rect = arrowd.get_rect()
+		arrow_rect.center = 208, 149
 		arrow_timer = time()
 
 	SCR.blit(BG, (0, 0))
-	SCR.blit(arrowd, (175, 107))
+	SCR.blit(arrowd, arrow_rect)
 	pygame.display.update()
 
 	
