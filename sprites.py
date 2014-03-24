@@ -3,6 +3,9 @@ from pygame.locals import *
 
 from classes import *
 
+from threading import Thread
+from time import time, sleep
+
 class BoardSprite(Board, pygame.sprite.Sprite):
 
 	overlay = None
@@ -39,3 +42,70 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 							self.image.blit(self.overlay[count], self.get_cell_rect(t.topleft[0]+i, t.topleft[1]+j))
 							count+=1
 
+class Button(pygame.sprite.Sprite):
+
+	def __init__(self, image, (x, y), action, *args):
+		pygame.sprite.Sprite.__init__(self)
+		self.bimage = image
+		self.image = image.copy()
+		self.rect = self.image.get_rect()
+		self.action = action
+		self.args = args
+
+		self.enlarged = False
+
+		self.x = x
+		self.y = y
+		self.rect.center = self.x, self.y
+
+	def update(self):
+		if(self.rect.collidepoint(pygame.mouse.get_pos())):
+			if not self.enlarged:
+				self.enlarged = True
+				self.rect.inflate_ip(20, 20)
+				self.image = pygame.transform.scale(self.bimage, (self.rect.size))
+		else:
+			if self.enlarged:
+				self.enlarged = False
+				self.rect.inflate_ip(-20, -20)
+				self.image = pygame.transform.scale(self.bimage, (self.rect.size))
+
+	def click(self):
+		pass
+
+class Timer(pygame.sprite.Sprite):
+
+	def __init__(self, font, (x, y)):
+		pygame.sprite.Sprite.__init__(self)
+
+		self.running = False
+
+		self.font = font
+		self.btime = 0
+		self.image = self.font.render("0:00", False, (0, 0, 0))
+		self.rect = self.image.get_rect()
+		self.x, self.y = x, y
+		self.rect.center = self.x, self.y
+
+	def update(self):
+		pass
+
+	def start(self):
+		self.running = True
+		t = Thread(target = self.count)
+		self.btime = time()
+		t.start()
+
+	def count(self):
+		while(self.running):
+			sleep(1)
+			t = time() - self.btime
+			tmp = str(int(t/60))+":"
+			if(t%60 < 10): tmp += "0"+str(int(t%60))
+			else: tmp+=  str(int(t%60))
+			self.image = self.font.render(tmp, False, (0, 0, 0))
+			self.rect = self.image.get_rect()
+			self.rect.center = self.x, self.y
+
+	def stop(self):
+		self.running = False

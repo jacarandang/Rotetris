@@ -46,6 +46,9 @@ class Board():
 					self.place(t)
 					self.tetrimo.remove(t)
 	
+	def remove(self, t):
+		self.tetrimo.remove(t)
+
 	def drop(self):
 		tet = self.tetrimo[0]
 		while(tet == self.tetrimo[0]):
@@ -151,7 +154,7 @@ class Board():
 		
 	def rotate_tetrimo_L(self):
 		pass
-		
+
 	def rotate_tetrimo_R(self):
 		pass
 		
@@ -174,6 +177,8 @@ class Tetrimo():
 		self.color = type[6]
 		self.topleft = topleft
 		self.direction = direction
+
+		self.ttype = type
 		
 	def rotateL(self):	#checking
 		narr = []
