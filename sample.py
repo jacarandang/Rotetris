@@ -71,8 +71,8 @@ class Game():
 		self.board = BoardSprite()
 		self.allsprite.add(self.board)
 
-		self.eq = EventQ()
-		eq.next_tetrimo()
+		self.eq = EventQ(self.board)
+		self.eq.next_tetrimo()
 
 		self.clock = pygame.time.Clock()
 		self.speed = 1.00
@@ -84,17 +84,28 @@ class Game():
 		while(self.running):
 			self.clock.tick(FPS)
 
-			if(self.timer - time() >= 1/self.speed):
+			if(time() - self.timer >= 1/self.speed):
+				print "drop"
 				self.timer = time()
 				self.board.move()
 
 			self.event()
 
+			if(board.is_over()):
+				running = False
+
+			self.allsprite.update()
+			
+			self.screen.blit(BG, (0, 0))
+			self.allsprite.draw(self.screen)
+			self.screen.blit(self.eq.arrow, (50, 35))
+			pygame.display.update()
+
 	def event(self):
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				self.running = False
-			elif event.type == KEYDOWN:
+			elif event.type == KEYDOWN or event.key == KEYUP:
 				self.keydown(event)
 
 	def pause(self):
@@ -107,7 +118,21 @@ class Game():
 						return
 	
 	def keydown(self, event):
-		pass
+		if event.key == K_UP:
+			self.eq.tet.rotateL()
+		elif event.key == K_DOWN:
+			self.speed = 4.50
+		elif event.key == K_LEFT:
+			self.eq.move_left()
+		elif event.key == K_RIGHT:
+			self.eq.move_right()
+		elif event.key == K_SPACE:
+			self.board.drop()
+		elif event.key == K_p:
+			self.pause()
+		elif event.type == KEYUP:
+			if event.key == K_DOWN:
+				self.speed = 1
 
 o = load_image("overlay.jpg").convert()
 o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
@@ -127,7 +152,8 @@ timer = time()
 running = True
 
 while(running):
-	clock.tick(60)
+	t = clock.tick(60)
+	print 1000.00/t
 	if(time() - timer >= 1/speed):
 		timer = time()
 		board.move()
@@ -176,4 +202,6 @@ if board.is_over():
 	pygame.display.update()
 	sleep(3)
 	
+g = Game(EASY, SCREEN)
+g.start()
 pygame.quit()
