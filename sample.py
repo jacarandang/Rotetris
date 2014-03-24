@@ -14,11 +14,6 @@ pygame.init()
 pygame.font.init()
 pygame.key.set_repeat(100, 70)
 
-SCREEN = pygame.display.set_mode((800, 600))
-BG = pygame.Surface(SCREEN.get_size()).convert()
-BG.fill((100, 100, 100))
-FONT = pygame.font.Font(None, 30)
-
 def load_image(file, colorkey = None):
 	surf = pygame.image.load(path.join('resource', file)).convert()
 	if colorkey is not None:
@@ -26,6 +21,12 @@ def load_image(file, colorkey = None):
 			colorkey = surf.get_at((0,0))
 		surf.set_colorkey(colorkey, RLEACCEL)
 	return surf
+
+SCREEN = pygame.display.set_mode((800, 600))
+BG = load_image('Board.png')
+FONT = pygame.font.Font(None, 30)
+
+
 		
 def pause():
 	while(True):
@@ -35,7 +36,6 @@ def pause():
 			elif event.type == KEYDOWN:
 				if event.key == K_p:
 					return
-
 				
 class EventQ():
 
@@ -43,7 +43,6 @@ class EventQ():
 		self.board = board
 		self.board.eq = self
 		self.tet = None
-		self.tdir = None
 		self.alist = []
 		for i in xrange(4):
 			self.alist.append(load_image(D_LIST[i][2], -1))
@@ -51,9 +50,8 @@ class EventQ():
 		self.arrow = None
 		
 	def next_tetrimo(self):
-		self.tet = Tetrimo(choice(B_LIST), (self.board.spawn, self.board.spawn), choice(D_LIST))
+		self.tet = Tetrimo(choice(B_LIST), (self.board.spawn+1, self.board.spawn+1), choice(D_LIST))
 		self.board.add_tetrimo(self.tet)
-		self.tdir = FONT.render(self.tet.direction[2], False, (255, 0, 0))
 		self.arrow = self.alist[D_LIST.index(self.tet.direction)]
 
 	def move_left(self):
@@ -61,6 +59,55 @@ class EventQ():
 
 	def move_right(self):
 		self.board.move(D_LIST[D_LIST.index(self.tet.direction) - 1])
+
+
+class Game():
+
+	def __init__(self, level, screen):
+		self.level = level
+		self.screen = screen
+
+		self.allsprite = pygame.sprite.Group()
+		self.board = BoardSprite()
+		self.allsprite.add(self.board)
+
+		self.eq = EventQ()
+		eq.next_tetrimo()
+
+		self.clock = pygame.time.Clock()
+		self.speed = 1.00
+		self.running = True
+
+		self.timer = time()
+
+	def start(self):
+		while(self.running):
+			self.clock.tick(FPS)
+
+			if(self.timer - time() >= 1/self.speed):
+				self.timer = time()
+				self.board.move()
+
+			self.event()
+
+	def event(self):
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				self.running = False
+			elif event.type == KEYDOWN:
+				self.keydown(event)
+
+	def pause(self):
+		while(True):
+			for event in pygame.event.get():
+				if event.type == QUIT:
+					return
+				elif event.type == KEYDOWN:
+					if event.key == K_p:
+						return
+	
+	def keydown(self, event):
+		pass
 
 o = load_image("overlay.jpg").convert()
 o = pygame.transform.scale(o, (BWIDTH, BWIDTH))
@@ -115,7 +162,6 @@ while(running):
 			
 	SCREEN.blit(BG, (0, 0))
 	allsprite.draw(SCREEN)
-	SCREEN.blit(eq.tdir, (650, 50))
 	SCREEN.blit(eq.arrow, (50, 35))
 	pygame.display.update()
 	

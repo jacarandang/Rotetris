@@ -29,7 +29,9 @@ arrow_ang = 0
 
 clock = pygame.time.Clock()
 running = True
+
 while(running):
+	clock.tick(60)
 
 	for event in pygame.event.get():
 		if event.type == QUIT:
@@ -40,14 +42,14 @@ while(running):
 		arrow_ang %= 360
 		arrowd = pygame.transform.rotate(arrow, arrow_ang)	
 		arrow_rect = arrowd.get_rect()
-		arrow_rect.center = 208, 149
+		arrow_rect.center = 209, 150
 		arrow_timer = time()
 	elif(test):
 		arrow_ang -= 1
 		arrow_ang %= 360
 		arrowd = pygame.transform.rotate(arrow, arrow_ang)	
 		arrow_rect = arrowd.get_rect()
-		arrow_rect.center = 208, 149
+		arrow_rect.center = 209, 150
 		arrow_timer = time()
 
 	SCR.blit(BG, (0, 0))

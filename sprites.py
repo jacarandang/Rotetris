@@ -12,10 +12,8 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 		Board.__init__(self)
 		
 		self.w = BSIZE*BWIDTH
-		self.image = pygame.Surface((self.w, self.w))
-		for i in xrange(BSIZE):
-			pygame.draw.line(self.image, (255, 255, 255, 255), (i*BWIDTH, 0), (i*BWIDTH, self.w))
-			pygame.draw.line(self.image, (255, 255, 255, 255), (0, i*BWIDTH), (self.w, i*BWIDTH))
+		self.image = pygame.Surface((self.w, self.w)).convert_alpha()
+		self.image.fill((0, 0, 0, 0))
 		self.rect = self.image.get_rect()
 		
 	def update(self):
@@ -29,7 +27,7 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 			for j in xrange(BSIZE):
 				if(self[i][j]): self.image.fill((100, 100, 100), self.get_cell_rect(i, j))
 				else:
-					if(i >= self.spawn and i < self.spawn+4 and j >= self.spawn and j < self.spawn+4	):
+					if(i >= self.spawn and i < self.spawn+4 and j >= self.spawn and j < self.spawn+4):
 						self.image.fill((100, 50, 50), self.get_cell_rect(i, j))
 					else:
 						self.image.fill((0, 0, 0), self.get_cell_rect(i, j))

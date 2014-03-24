@@ -16,3 +16,8 @@ SOUTH = (1, 0, "down.png")
 WEST  = (0, -1, "left.png")
 EAST  = (0, 1, "right.png")
 D_LIST = [NORTH, EAST, SOUTH, WEST]
+
+EASY = 0
+NORMAL = 1
+HARD = 2
+EXTREME = 3
