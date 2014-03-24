@@ -134,7 +134,7 @@ class Game():
 			if event.key == K_DOWN:
 				self.speed = 1
 
-o = load_image("overlay.jpg").convert()
+o = load_image("overlay.png").convert()
 o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
 o.set_alpha(100)
 BoardSprite.overlay = [o, o.copy(), o.copy(), o.copy()]
