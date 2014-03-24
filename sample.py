@@ -46,7 +46,7 @@ class EventQ():
 		self.alist = []
 		for i in xrange(4):
 			self.alist.append(load_image(D_LIST[i][2], -1))
-			self.alist[i].set_alpha(125)
+			self.alist[i].set_alpha(150)
 		self.arrow = None
 		
 	def next_tetrimo(self):
@@ -110,7 +110,7 @@ class Game():
 		pass
 
 o = load_image("overlay.jpg").convert()
-o = pygame.transform.scale(o, (BWIDTH, BWIDTH))
+o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
 o.set_alpha(100)
 BoardSprite.overlay = [o, o.copy(), o.copy(), o.copy()]
 		

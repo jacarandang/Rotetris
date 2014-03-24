@@ -26,11 +26,8 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 		for i in xrange(BSIZE):
 			for j in xrange(BSIZE):
 				if(self[i][j]): self.image.fill((100, 100, 100), self.get_cell_rect(i, j))
-				else:
-					if(i >= self.spawn and i < self.spawn+4 and j >= self.spawn and j < self.spawn+4):
-						self.image.fill((100, 50, 50), self.get_cell_rect(i, j))
-					else:
-						self.image.fill((0, 0, 0), self.get_cell_rect(i, j))
+				else:	
+					self.image.fill((0, 0, 0, 0), self.get_cell_rect(i, j))
 				
 		count = 0
 		for t in self.tetrimo:
@@ -41,3 +38,4 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 						if(self.overlay):
 							self.image.blit(self.overlay[count], self.get_cell_rect(t.topleft[0]+i, t.topleft[1]+j))
 							count+=1
+
