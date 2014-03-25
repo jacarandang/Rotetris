@@ -44,13 +44,12 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 
 class Button(pygame.sprite.Sprite):
 
-	def __init__(self, image, (x, y), action, *args):
+	def __init__(self, image, (x, y), action):
 		pygame.sprite.Sprite.__init__(self)
 		self.bimage = image
 		self.image = image.copy()
 		self.rect = self.image.get_rect()
 		self.action = action
-		self.args = args
 
 		self.enlarged = False
 
@@ -71,7 +70,8 @@ class Button(pygame.sprite.Sprite):
 				self.image = pygame.transform.scale(self.bimage, (self.rect.size))
 
 	def click(self):
-		pass
+		if(self.rect.collidepoint(pygame.mouse.get_pos())):
+			self.action()
 
 class Timer(pygame.sprite.Sprite):
 

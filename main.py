@@ -5,12 +5,7 @@ from time import time
 from os import path
 
 from random import *
-
 from sprites import Button
-# from sample import *
-#TEST
-test = False
-#TEST
 
 def load_image(file, colorkey = None):
 	surf = pygame.image.load(path.join('resource', file)).convert_alpha()
@@ -21,6 +16,7 @@ def load_image(file, colorkey = None):
 	return surf
 
 pygame.init()
+pygame.display.set_caption("Rotetris")
 SCR = pygame.display.set_mode((800, 600))
 BG =  load_image("title.png")
 #main animation
@@ -31,26 +27,69 @@ arrow_rect.center = 209, 150
 arrow_timer = time()
 arrow_ang = 0
 #animation
-
-def testf(*args):
-	print "print click"
-
-start = load_image('Start.png')
-startb = Button(start, (400, 300), testf)
-
-option = load_image("Options.png")
-optionb = Button(option, (400, 375), testf)
-
-exit = load_image("Exit.png")
-exitb = Button(exit, (400, 450), testf)
+BGM = pygame.mixer.Sound(path.join('resource', 'music', 'track1.ogg'))
+BGM.play(-1)
 
 baseoptions = pygame.sprite.Group()
-baseoptions.add(startb, optionb, exitb)
-
-allsprites = pygame.sprite.Group()
-
+startoptions = pygame.sprite.Group()
+creditsoptions = pygame.sprite.Group()
+rendergroup = baseoptions
 clock = pygame.time.Clock()
 running = True
+
+def startf():
+	rendergroup = startoptions
+def optionf(): pass
+def creditf():
+	rendergroup = creditsoptions
+def exitf():
+	running = False
+	print ".."
+
+
+
+#Main Menu
+start = load_image('Start.png')
+startb = Button(start, (400, 275), startf)
+
+option = load_image("Options.png")
+optionb = Button(option, (400, 350), optionf)
+
+credit = load_image("Credits.png")
+creditb = Button(credit, (400, 425), creditf)
+
+exit = load_image("Exit.png")
+exitb = Button(exit, (400, 500), exitf)
+
+baseoptions.add(startb, optionb, creditb, exitb)
+#-------------------------------------
+#start menu
+easy = load_image("Easy.png")
+easyb = Button(easy, (400, 275), None)
+
+normal = load_image("Normal.png")
+normalb = Button(normal, (400, 350), None)
+
+hard = load_image("Hard.png")
+hardb = Button(hard, (400, 425), None)
+
+insane = load_image("Insane.png")
+insaneb = Button(insane, (400, 500), None)
+
+startoptions.add(easyb, normalb, hardb, insaneb)
+#-------------------------------------
+#credits
+class _CreditsPg(pygame.sprite.Sprite):
+
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = load_image("Creditspg.png")
+		self.rect = self.image.get_rect()
+creditspg = _CreditsPg()
+
+creditsoptions.add(creditspg)
+
+allsprites = pygame.sprite.Group()
 
 while(running):
 	clock.tick(60)
@@ -58,16 +97,18 @@ while(running):
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			running = False
+		elif event.type == KEYDOWN:
+			if event.key == K_ESCAPE:
+				rendergroup = baseoptions
+		elif event.type == MOUSEBUTTONDOWN:
+			if event.button == 1:
+				for sp in rendergroup:
+					if isinstance(sp, Button):
+						sp.click()
+						print "Click"
 
-	if(time() - arrow_timer > 1 and not test):
+	if(time() - arrow_timer > 1):
 		arrow_ang += choice([90, 180, 270])
-		arrow_ang %= 360
-		arrowd = pygame.transform.rotate(arrow, arrow_ang)	
-		arrow_rect = arrowd.get_rect()
-		arrow_rect.center = 209, 150
-		arrow_timer = time()
-	elif(test):
-		arrow_ang -= 1
 		arrow_ang %= 360
 		arrowd = pygame.transform.rotate(arrow, arrow_ang)	
 		arrow_rect = arrowd.get_rect()
@@ -78,9 +119,11 @@ while(running):
 	SCR.blit(arrowd, arrow_rect)
 
 	allsprites.update()
-	baseoptions.update()
-	allsprites.draw(SCR)
+	rendergroup.update()
 
-	baseoptions.draw(SCR)
+	allsprites.draw(SCR)
+	rendergroup.draw(SCR)
 	pygame.display.update()
 	
+BGM.stop()
+pygame.quit()
