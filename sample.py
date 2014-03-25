@@ -104,7 +104,6 @@ class Game():
 			self.clock.tick(FPS)
 
 			if(time() - self.timer >= 1/self.speed):
-				print "drop"
 				self.timer = time()
 				self.board.move()
 

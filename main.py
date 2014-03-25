@@ -80,7 +80,7 @@ while(running):
 	allsprites.update()
 	baseoptions.update()
 	allsprites.draw(SCR)
+
 	baseoptions.draw(SCR)
 	pygame.display.update()
-
 	
