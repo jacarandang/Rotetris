@@ -37,9 +37,15 @@ class EventQ():
 	def next_tetrimo(self, layout = None):
 		self.tet = None
 		if not layout:
-			self.tet = Tetrimo(choice(B_LIST), (self.board.spawn+1, self.board.spawn+1), choice(D_LIST))
+			if(self.level == EASY):
+				self.tet = Tetrimo(choice(B_LIST), (self.board.spawn+1, self.board.spawn+1), choice([NORTH, SOUTH]))
+			else:	
+				self.tet = Tetrimo(choice(B_LIST), (self.board.spawn+1, self.board.spawn+1), choice(D_LIST))
 		else:
-			self.tet = Tetrimo(layout, (self.board.spawn+1, self.board.spawn+1), choice(D_LIST))
+			if(self.level == EASY):
+				self.tet = Tetrimo(layout, (self.board.spawn+1, self.board.spawn+1), choice([NORTH, SOUTH]))
+			else:
+				self.tet = Tetrimo(layout, (self.board.spawn+1, self.board.spawn+1), choice(D_LIST))
 		self.board.add_tetrimo(self.tet)
 		self.arrow = self.alist[D_LIST.index(self.tet.direction)]
 		self.hshift = False
