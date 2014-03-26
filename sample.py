@@ -10,9 +10,7 @@ from globals import *
 from classes import *
 from sprites import *
 
-pygame.init()
-pygame.font.init()
-pygame.key.set_repeat(100, 70)
+
 
 def load_image(file, colorkey = None):
 	surf = pygame.image.load(path.join('resource', file)).convert()
@@ -21,10 +19,6 @@ def load_image(file, colorkey = None):
 			colorkey = surf.get_at((0,0))
 		surf.set_colorkey(colorkey, RLEACCEL)
 	return surf
-
-SCREEN = pygame.display.set_mode((800, 600))
-BG = load_image('Board.png')
-FONT = pygame.font.Font(None, 30)
 
 class EventQ():
 
@@ -159,22 +153,32 @@ class Game():
 			if event.key == K_DOWN:
 				self.speed = 1
 
+if __name__ == '__main__':
 
-o = load_image("overlay.png").convert()
-o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
-o.set_alpha(100)
-BoardSprite.overlay = [o, o.copy(), o.copy(), o.copy()]
+	pygame.init()
+	pygame.font.init()
+	pygame.key.set_repeat(100, 70)
+
+	SCREEN = pygame.display.set_mode((800, 600))
+	BG = load_image('Board.png')
+	FONT = pygame.font.Font(None, 30)
+
+	o = load_image("overlay.png").convert()
+	o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
+	o.set_alpha(100)
+	BoardSprite.overlay = [o, o.copy(), o.copy(), o.copy()]
 	
-g = Game(EASY, SCREEN)
-g.start()
+	g = Game(EASY, SCREEN)
+	g.start()
 
-sleep(1)
-img = FONT.render("GAME OVER!", False, (255, 255, 0))
-rect = img.get_rect()
-SCREEN.blit(BG, (0, 0))
-rect.center = (400, 300)
-SCREEN.blit(img, rect)
-pygame.display.update()
-sleep(3)
+	sleep(1)
+	if(g.board.is_over()):
+		img = FONT.render("GAME OVER!", False, (255, 255, 0))
+		rect = img.get_rect()
+		SCREEN.blit(BG, (0, 0))
+		rect.center = (400, 300)
+		SCREEN.blit(img, rect)
+		pygame.display.update()
+		sleep(3)
 	
 pygame.quit()

@@ -30,36 +30,41 @@ arrow_ang = 0
 BGM = pygame.mixer.Sound(path.join('resource', 'music', 'track1.ogg'))
 BGM.play(-1)
 
+
+class MainObjects():
+
+	def __init__(self, default):
+		self.group = default
+		self.running = True
+
+	def set(self, group):
+		self.group = group
+
+	def get(self):
+		return self.group
+
+	def stop(self):
+		self.running = False
+
 baseoptions = pygame.sprite.Group()
 startoptions = pygame.sprite.Group()
 creditsoptions = pygame.sprite.Group()
-rendergroup = baseoptions
+mainobject = MainObjects(baseoptions)
+
 clock = pygame.time.Clock()
-running = True
-
-def startf():
-	rendergroup = startoptions
-def optionf(): pass
-def creditf():
-	rendergroup = creditsoptions
-def exitf():
-	running = False
-	print ".."
-
-
 
 #Main Menu
 start = load_image('Start.png')
-startb = Button(start, (400, 275), startf)
+startb = Button(start, (400, 275), lambda: mainobject.set(startoptions))
 
 option = load_image("Options.png")
-optionb = Button(option, (400, 350), optionf)
+optionb = Button(option, (400, 350), None)
 
 credit = load_image("Credits.png")
-creditb = Button(credit, (400, 425), creditf)
+creditb = Button(credit, (400, 425), lambda: mainobject.set(creditsoptions))
 
 exit = load_image("Exit.png")
-exitb = Button(exit, (400, 500), exitf)
+exitb = Button(exit, (400, 500), lambda: mainobject.stop())
 
 baseoptions.add(startb, optionb, creditb, exitb)
 #-------------------------------------
@@ -76,7 +81,10 @@ hardb = Button(hard, (400, 425), None)
 insane = load_image("Insane.png")
 insaneb = Button(insane, (400, 500), None)
 
-startoptions.add(easyb, normalb, hardb, insaneb)
+back = load_image("Back.png")
+backb = Button(back, (100, 565), lambda: mainobject.set(baseoptions))
+
+startoptions.add(easyb, normalb, hardb, insaneb, backb)
 #-------------------------------------
 #credits
 class _CreditsPg(pygame.sprite.Sprite):
@@ -88,21 +96,22 @@ class _CreditsPg(pygame.sprite.Sprite):
 creditspg = _CreditsPg()
 
 creditsoptions.add(creditspg)
+#---------------------------------------
 
 allsprites = pygame.sprite.Group()
 
-while(running):
+while(mainobject.running):
 	clock.tick(60)
 
 	for event in pygame.event.get():
 		if event.type == QUIT:
-			running = False
+			mainobject.stop()
 		elif event.type == KEYDOWN:
 			if event.key == K_ESCAPE:
-				rendergroup = baseoptions
+				mainobject.set(baseoptions)
 		elif event.type == MOUSEBUTTONDOWN:
 			if event.button == 1:
-				for sp in rendergroup:
+				for sp in mainobject.get():
 					if isinstance(sp, Button):
 						sp.click()
 						print "Click"
@@ -119,10 +128,10 @@ while(running):
 	SCR.blit(arrowd, arrow_rect)
 
 	allsprites.update()
-	rendergroup.update()
+	mainobject.get().update()
 
 	allsprites.draw(SCR)
-	rendergroup.draw(SCR)
+	mainobject.get().draw(SCR)
 	pygame.display.update()
 	
 BGM.stop()
