@@ -18,6 +18,9 @@ def load_image(file, colorkey = None):
 pygame.init()
 pygame.display.set_caption("Rotetris")
 SCR = pygame.display.set_mode((800, 600))
+pygame.font.init()
+pygame.key.set_repeat(100, 70)
+
 BG =  load_image("title.png")
 #main animation
 arrow = load_image("arrow.png")

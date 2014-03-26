@@ -1,3 +1,6 @@
+import pygame
+from pygame.locals import *
+
 from threading import Thread
 
 class RandomEvents(Thread):
