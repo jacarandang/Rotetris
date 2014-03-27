@@ -6,6 +6,7 @@ from os import path
 
 from random import *
 from sprites import Button
+from game import *
 
 def load_image(file, colorkey = None):
 	surf = pygame.image.load(path.join('resource', file)).convert_alpha()
@@ -18,6 +19,8 @@ def load_image(file, colorkey = None):
 pygame.init()
 pygame.display.set_caption("Rotetris")
 SCR = pygame.display.set_mode((800, 600))
+icon = load_image("icon.png")
+pygame.display.set_icon(icon)
 pygame.font.init()
 pygame.key.set_repeat(100, 70)
 
@@ -73,16 +76,16 @@ baseoptions.add(startb, optionb, creditb, exitb)
 #-------------------------------------
 #start menu
 easy = load_image("Easy.png")
-easyb = Button(easy, (400, 275), None)
+easyb = Button(easy, (400, 275), lambda: Game(EASY, SCR).start())
 
 normal = load_image("Normal.png")
-normalb = Button(normal, (400, 350), None)
+normalb = Button(normal, (400, 350), lambda: Game(NORMAL, SCR).start())
 
 hard = load_image("Hard.png")
-hardb = Button(hard, (400, 425), None)
+hardb = Button(hard, (400, 425), lambda: Game(HARD, SCR).start())
 
 insane = load_image("Insane.png")
-insaneb = Button(insane, (400, 500), None)
+insaneb = Button(insane, (400, 500), lambda: Game(EXTREME, SCR).start())
 
 back = load_image("Back.png")
 backb = Button(back, (100, 565), lambda: mainobject.set(baseoptions))
