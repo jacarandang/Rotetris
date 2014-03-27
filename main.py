@@ -59,6 +59,9 @@ mainobject = MainObjects(baseoptions)
 
 clock = pygame.time.Clock()
 
+def start_game(difficulty):
+	pass
+
 #Main Menu
 start = load_image('Start.png')
 startb = Button(start, (400, 275), lambda: mainobject.set(startoptions))
