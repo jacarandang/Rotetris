@@ -33,7 +33,7 @@ arrow_rect.center = 209, 150
 arrow_timer = time()
 arrow_ang = 0
 #animation
-BGM = pygame.mixer.Sound(path.join('resource', 'music', 'track1.ogg'))
+BGM = pygame.mixer.Sound(path.join('resource', 'music', 'dubstep.ogg'))
 BGM.play(-1)
 
 
