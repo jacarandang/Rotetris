@@ -117,7 +117,6 @@ while(mainobject.running):
 				for sp in mainobject.get():
 					if isinstance(sp, Button):
 						sp.click()
-						print "Click"
 
 	if(time() - arrow_timer >= .75):
 		arrow_ang += choice([90, 180, 270])

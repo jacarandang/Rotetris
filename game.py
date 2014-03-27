@@ -9,6 +9,7 @@ from particle import *
 from globals import *
 from classes import *
 from sprites import *
+from mechanics import *
 
 def load_image(file, colorkey = None):
 	surf = pygame.image.load(path.join('resource', file)).convert()
@@ -34,6 +35,8 @@ class EventQ():
 		self.hshift =  False
 		self.hold  =  None
 
+		self.pause = False
+
 	def next_tetrimo(self, layout = None):
 		self.tet = None
 		if not layout:
@@ -58,7 +61,6 @@ class EventQ():
 
 	def shift(self):
 		if not self.hshift:
-			print "shifting"
 			self.hshift = True
 			if(self.hold):
 				tmp = self.hold
@@ -72,6 +74,12 @@ class EventQ():
 				self.board.remove(self.tet)
 				self.next_tetrimo()
 				self.hshift = True
+
+	def pauseG(self):
+		self.pause = True
+
+	def playG(self):
+		self.pause = False
 
 class Game():
 
@@ -97,6 +105,8 @@ class Game():
 		self.eq = EventQ(self.board, level)
 		self.eq.next_tetrimo()
 
+		self.mechanics = RandomEvents(self.eq, self.board, self.screen)
+
 		self.clock = pygame.time.Clock()
 		self.speed = 1.00
 		self.running = True
@@ -105,6 +115,7 @@ class Game():
 
 	def start(self):
 		tthread = self.tsprite.start()
+		mthread = self.mechanics.start()
 		while(self.running):
 			self.clock.tick(FPS)
 
@@ -118,13 +129,19 @@ class Game():
 				self.running = False
 
 			self.allsprite.update()
-			
+		
+			while(self.eq.pause):
+				pass
+
 			self.screen.blit(self.bg, (0, 0))
 			self.allsprite.draw(self.screen)
 			self.screen.blit(self.eq.arrow, (50, 35))
 			pygame.display.update()
+
 		self.tsprite.stop()
+		self.mechanics.stop()
 		tthread.join()
+		mthread.join()
 		if(self.board.is_over()):
 			self.gameover()
 
