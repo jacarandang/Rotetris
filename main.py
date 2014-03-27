@@ -119,7 +119,7 @@ while(mainobject.running):
 						sp.click()
 						print "Click"
 
-	if(time() - arrow_timer > 1):
+	if(time() - arrow_timer >= .75):
 		arrow_ang += choice([90, 180, 270])
 		arrow_ang %= 360
 		arrowd = pygame.transform.rotate(arrow, arrow_ang)	

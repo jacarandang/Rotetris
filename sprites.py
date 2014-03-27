@@ -95,6 +95,7 @@ class Timer(pygame.sprite.Sprite):
 		t = Thread(target = self.count)
 		self.btime = time()
 		t.start()
+		return t
 
 	def count(self):
 		while(self.running):

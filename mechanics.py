@@ -2,6 +2,15 @@ import pygame
 from pygame.locals import *
 
 from threading import Thread
+from time import *
+
+def load_image(file, colorkey = None):
+	surf = pygame.image.load(path.join('resource', file)).convert()
+	if colorkey is not None:
+		if colorkey is -1:
+			colorkey = surf.get_at((0,0))
+		surf.set_colorkey(colorkey, RLEACCEL)
+	return surf
 
 class RandomEvents(Thread):
 
@@ -10,13 +19,16 @@ class RandomEvents(Thread):
 		self.eq = eq
 		self.board = board
 		self.screen = screen
+		self.doge_img = load_image("doge.png")
 
 	def run(self):
-		for i in xrange(100):
-			print str(i) + " " + self.name + "\n"
+		pass
 
 	def doge(self):
-		pass
+		self.screen.blit(self.doge_img, (0, 0))
+		pygame.display.update()
+		sleep(.75)
+		
 		
 r1 = RandomEvents(None, None)
 r2 = RandomEvents(None, None)

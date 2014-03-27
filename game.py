@@ -81,6 +81,11 @@ class Game():
 
 		self.bg = load_image("Board.png")
 
+		o = load_image("overlay.png").convert()
+		o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
+		o.set_alpha(100)
+		BoardSprite.overlay = [o, o.copy(), o.copy(), o.copy()]
+
 		self.allsprite = pygame.sprite.Group()
 		self.board = BoardSprite()
 		self.allsprite.add(self.board)
@@ -99,7 +104,7 @@ class Game():
 		self.timer = time()
 
 	def start(self):
-		self.tsprite.start()
+		tthread = self.tsprite.start()
 		while(self.running):
 			self.clock.tick(FPS)
 
@@ -119,6 +124,9 @@ class Game():
 			self.screen.blit(self.eq.arrow, (50, 35))
 			pygame.display.update()
 		self.tsprite.stop()
+		tthread.join()
+		if(self.board.is_over()):
+			self.gameover()
 
 	def event(self):
 		for event in pygame.event.get():
@@ -209,6 +217,12 @@ class Game():
 			elif event.key == K_x:
 				self.eq.tet.rotateR()
 
+	def gameover(self):
+		img = load_image("gameover.png")
+		rect = img.get_rect()
+		self.screen.blit(img, (0, 0))
+		pygame.display.update()
+		sleep(3)
 
 if __name__ == '__main__':
 
@@ -217,25 +231,9 @@ if __name__ == '__main__':
 	pygame.key.set_repeat(100, 70)
 
 	SCREEN = pygame.display.set_mode((800, 600))
-	BG = load_image('Board.png')
 	FONT = pygame.font.Font(None, 30)
-
-	o = load_image("overlay.png").convert()
-	o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
-	o.set_alpha(100)
-	BoardSprite.overlay = [o, o.copy(), o.copy(), o.copy()]
 	
 	g = Game(EASY, SCREEN)
 	g.start()
-
-	sleep(1)
-	if(g.board.is_over()):
-		img = load_image("gameover.png")
-		rect = img.get_rect()
-		SCREEN.blit(BG, (0, 0))
-		rect.center = (400, 300)
-		SCREEN.blit(img, rect)
-		pygame.display.update()
-		sleep(3)
 	
 	pygame.quit()
