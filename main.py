@@ -51,7 +51,7 @@ class MainObjects():
 
 baseoptions = pygame.sprite.Group()
 startoptions = pygame.sprite.Group()
-creditsoptions = pygame.sprite.Group()
+creditsoptions = pygame.sprite.OrderedUpdates()
 mainobject = MainObjects(baseoptions)
 
 clock = pygame.time.Clock()
@@ -98,7 +98,7 @@ class _CreditsPg(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 creditspg = _CreditsPg()
 
-creditsoptions.add(creditspg)
+creditsoptions.add(creditspg, backb)
 #---------------------------------------
 
 allsprites = pygame.sprite.Group()
