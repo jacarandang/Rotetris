@@ -16,14 +16,15 @@ def load_image(file, colorkey = None):
 
 class RandomEvents():
 
-	def __init__(self, eq, board, screen):
+	def __init__(self, game, eq, board, screen):
+		self.game = game
 		self.eq = eq
 		self.board = board
 		self.screen = screen
 		self.doge_img = load_image("doge.png")
 		self.running = False
 
-		self.events = [self.doge, self.board.rotateL, self.board.rotateR]
+		self.events = [self.speed_up]
 
 		self.timer = 0
 
@@ -51,5 +52,19 @@ class RandomEvents():
 		self.eq.pauseG()
 		self.screen.blit(self.doge_img, (0, 0))
 		pygame.display.update()
-		sleep(.75)
+		sleep(1)
 		self.eq.playG()
+
+	def tetrimo_rotate(self):
+		choice([self.eq.tet.rotateL, self.eq.tet.rotateL])()
+
+	def board_rotate(self):
+		choice([self.board.rotateL, self.board.rotateR])()
+
+	def speed_up(self):
+		self.game.speed *= 3.00
+		sleep(5)
+		self.game.speed /= 3.00
+
+	def speed_down(self):
+		pass

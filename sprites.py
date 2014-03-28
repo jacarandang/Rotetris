@@ -110,3 +110,30 @@ class Timer(pygame.sprite.Sprite):
 
 	def stop(self):
 		self.running = False
+
+class Text(pygame.sprite.Sprite):
+
+	def __init__(self, font, fxn, (x, y)):
+		pygame.sprite.Sprite.__init__(self)
+		self.font = font
+		self.fxn  = fxn
+		self.dt = fxn()
+		self.image = self.font.render(str(self.dt), False, (0, 0, 0))
+		self.rect = self.image.get_rect()
+		self.x, self.y = x, y
+		self.rect.center = self.x, self.y
+
+	def update(self):
+		if(self.dt != self.fxn()):
+			self.dt = self.fxn()
+			self.image = self.font.render(str(self.dt), False, (0, 0, 0))
+			self.rect = self.image.get_rect()
+		self.rect.center = self.x, self.y
+
+class Hold(pygame.sprite.Sprite):
+
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+
+	def update(self):
+		pass

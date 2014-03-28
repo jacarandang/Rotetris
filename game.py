@@ -88,7 +88,9 @@ class Game():
 		self.screen = screen
 
 		self.bg = load_image("Board.png")
-
+		self.bgm = pygame.mixer.Sound(path.join("resource", "music", "dubstep.ogg"))
+		self.bgm.play(-1)
+		
 		o = load_image("overlay.png").convert()
 		o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
 		o.set_alpha(100)
@@ -98,14 +100,16 @@ class Game():
 		self.board = BoardSprite()
 		self.allsprite.add(self.board)
 
-		self.font = pygame.font.Font(None, 30)
+		self.font = pygame.font.Font(path.join("resource", "font", "arro_terminal.ttf"), 30)
 		self.tsprite = Timer(self.font, (700, 115))
-		self.allsprite.add(self.tsprite)
+		self.lcsprite = Text(self.font, lambda: self.board.lineclears, (700, 260))
+		self.mdsprite = Text(self.font, lambda: MODETEXT[self.level], (700, 330))
+		self.allsprite.add(self.tsprite, self.lcsprite, self.mdsprite)
 
 		self.eq = EventQ(self.board, level)
 		self.eq.next_tetrimo()
 
-		self.mechanics = RandomEvents(self.eq, self.board, self.screen)
+		self.mechanics = RandomEvents(self, self.eq, self.board, self.screen)
 
 		self.clock = pygame.time.Clock()
 		self.speed = 1.00
@@ -116,6 +120,7 @@ class Game():
 	def start(self):
 		tthread = self.tsprite.start()
 		mthread = self.mechanics.start()
+
 		while(self.running):
 			self.clock.tick(FPS)
 
@@ -167,14 +172,14 @@ class Game():
 				if event.key == K_UP:
 					self.eq.tet.rotateL()
 				elif event.key == K_DOWN:
-					self.speed = 4.50
+					self.speed *= 4.50
 				elif event.key == K_LEFT:
 					self.eq.move_left()
 				elif event.key == K_RIGHT:
 					self.eq.move_right()
 			elif event.type == KEYUP:
 				if event.key == K_DOWN:
-					self.speed = 1
+					self.speed /= 4.50
 		else:
 			if(event.type == KEYDOWN):
 				if event.key == K_UP:

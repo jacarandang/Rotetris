@@ -33,9 +33,13 @@ arrow_rect.center = 209, 150
 arrow_timer = time()
 arrow_ang = 0
 #animation
-BGM = pygame.mixer.Sound(path.join('resource', 'music', 'dubstep.ogg'))
+BGM = pygame.mixer.Sound(path.join('resource', 'music', 'track1.ogg'))
 BGM.play(-1)
 
+def load_level(diff):
+	BGM.stop()
+	g = Game(diff, SCR)
+	g.start()
 
 class MainObjects():
 
@@ -79,7 +83,7 @@ baseoptions.add(startb, optionb, creditb, exitb)
 #-------------------------------------
 #start menu
 easy = load_image("Easy.png")
-easyb = Button(easy, (400, 275), lambda: Game(EASY, SCR).start())
+easyb = Button(easy, (400, 275), lambda: load_level(EASY))
 
 normal = load_image("Normal.png")
 normalb = Button(normal, (400, 350), lambda: Game(NORMAL, SCR).start())

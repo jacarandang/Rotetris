@@ -14,6 +14,7 @@ class Board():
 		self.tetrimo = []
 		self.eq = None
 		self.spawn = (BSIZE - 4)/2
+		self.lineclears = 0
 		
 	def __getitem__(self, idx):
 		return self.board[idx]
@@ -77,6 +78,7 @@ class Board():
 					lc = False
 					break
 			if lc:
+				self.lineclears += 1
 				for j in xrange(i, ((BSIZE-4)/2) - 1):
 					for k in xrange(BSIZE):
 						self[j][k] = self[j+1][k]
@@ -90,6 +92,7 @@ class Board():
 					lc = False
 					break
 			if lc:
+				self.lineclears += 1
 				for j in xrange(i, ((BSIZE-4)/2) - 1):
 					for k in xrange(BSIZE):
 						self[k][j] = self[k][j+1]
@@ -103,6 +106,7 @@ class Board():
 					lc = False
 					break
 			if lc:
+				self.lineclears += 1
 				for j in xrange(i, ((BSIZE+4)/2) + 1, -1):
 					for k in xrange(BSIZE):
 						self[j][k] = self[j-1][k]
@@ -116,6 +120,7 @@ class Board():
 					lc = False
 					break
 			if lc:
+				self.lineclears += 1
 				for j in xrange(i, ((BSIZE+4)/2) + 1, -1):
 					for k in xrange(BSIZE):
 						self[k][j] = self[k][j-1]
