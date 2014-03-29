@@ -133,6 +133,8 @@ class Text(pygame.sprite.Sprite):
 
 class Hold(pygame.sprite.Sprite):
 
+	overlay = None
+
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
 		self.hold = None
@@ -151,5 +153,7 @@ class Hold(pygame.sprite.Sprite):
 		self.image.fill((255, 255, 255, 0))
 		for i in xrange(4):
 			self.image.fill(layout[6], pygame.Rect(layout[i][1]*BWIDTH, layout[i][0]*BWIDTH, BWIDTH-1, BWIDTH - 1))
+			if self.overlay is not None:
+				self.image.blit(self.overlay[i], pygame.Rect(layout[i][1]*BWIDTH, layout[i][0]*BWIDTH, BWIDTH-1, BWIDTH - 1))
 		self.rect = self.image.get_rect()
 		self.rect.center = 700, 500

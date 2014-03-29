@@ -31,6 +31,7 @@ class Options:
 	def __init__(self):
 		self.volume = .5
 		self.control = 0
+		self.highscore = [0, 0, 0, 0]
 		self.load()
 
 	def save(self):

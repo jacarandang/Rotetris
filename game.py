@@ -98,6 +98,7 @@ class Game():
 		o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
 		o.set_alpha(100)
 		BoardSprite.overlay = [o, o.copy(), o.copy(), o.copy()]
+		Hold.overlay = [o.copy(), o.copy(), o.copy(), o.copy()]
 
 		self.allsprite = pygame.sprite.Group()
 		self.board = BoardSprite()
