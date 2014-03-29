@@ -52,10 +52,35 @@ class Board():
 			t.rotateL()
 			i = t.topleft[0]
 			j = t.topleft[1]
-			
+			if not (i >= 0 and j >= 0 and i+t.h <= BSIZE and j+t.w <= BSIZE):
+				t.rotateR()
+				continue
+			valid = True
+			for ii in xrange(t.h):
+				for jj in xrange(t.w):
+					if(t[ii][jj] and self[i+ii][j+jj]):
+						valid = False
+			if not valid:
+				t.rotateR()
+				continue
 
 	def rotate_tetrimo_R(self):
-		pass
+		for t in self.tetrimo:
+			t.rotateR()
+			i = t.topleft[0]
+			j = t.topleft[1]
+			if not (i >= 0 and j >= 0 and i+t.h <= BSIZE and j+t.w <= BSIZE):
+				t.rotateL()
+				continue
+			valid = True
+			for ii in xrange(t.h):
+				for jj in xrange(t.w):
+					if(t[ii][jj] and self[i+ii][j+jj]):
+						valid = False
+			if not valid:
+				t.rotateL()
+				continue
+
 	def remove(self, t):
 		self.tetrimo.remove(t)
 

@@ -180,7 +180,7 @@ class Game():
 		if(self.level == HARD or self.level == EXTREME):
 			if(event.type == KEYDOWN):
 				if event.key == K_UP:
-					self.eq.tet.rotateL()
+					self.eq.board.rotate_tetrimo_L()
 				elif event.key == K_DOWN:
 					self.speed = 4.50
 				elif event.key == K_LEFT:
@@ -196,14 +196,14 @@ class Game():
 					if self.eq.tet.direction == NORTH:
 						self.speed = 4.50
 					elif self.eq.tet.direction == SOUTH:
-						self.eq.tet.rotateL()
+						self.eq.board.rotate_tetrimo_L()
 					elif self.eq.tet.direction == WEST:
 						self.eq.move_left()
 					else:
 						self.eq.move_right()
 				elif event.key == K_DOWN:
 					if self.eq.tet.direction == NORTH:
-						self.eq.tet.rotateL()
+						self.eq.board.rotate_tetrimo_L()
 					elif self.eq.tet.direction == SOUTH:
 						self.speed = 4.50
 					elif self.eq.tet.direction == WEST:
@@ -218,14 +218,14 @@ class Game():
 					elif self.eq.tet.direction == WEST:
 						self.speed = 4.50
 					else:
-						self.eq.tet.rotateL()
+						self.eq.board.rotate_tetrimo_L()
 				elif event.key == K_RIGHT:
 					if self.eq.tet.direction == NORTH:
 						self.eq.move_left()
 					elif self.eq.tet.direction == SOUTH:
 						self.eq.move_right()
 					elif self.eq.tet.direction == WEST:
-						self.eq.tet.rotateL()
+						self.eq.board.rotate_tetrimo_L()
 					else:
 						self.speed = 4.50
 			elif event.type == KEYUP:
@@ -245,9 +245,9 @@ class Game():
 			elif event.key == K_SPACE:
 				self.board.drop()
 			elif event.key == K_z:
-				self.eq.tet.rotateL()
+				self.eq.board.rotate_tetrimo_L()
 			elif event.key == K_x:
-				self.eq.tet.rotateR()
+				self.eq.board.rotate_tetrimo_R()
 
 	def gameover(self):
 		img = load_image("gameover.png")
