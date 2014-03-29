@@ -34,6 +34,7 @@ arrow_timer = time()
 arrow_ang = 0
 #animation
 BGM = pygame.mixer.Sound(path.join('resource', 'music', 'track1.ogg'))
+BGM.set_volume(settings["volume"])
 BGM.play(-1)
 
 def load_level(diff):

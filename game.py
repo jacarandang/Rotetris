@@ -108,6 +108,7 @@ class Game():
 		self.board = BoardSprite()
 		self.allsprite.add(self.board)
 		self.speed = 1.00
+		self.ospeed = 1.00
 
 		self.font = pygame.font.Font(path.join("resource", "font", "arro_terminal.ttf"), 30)
 		self.tsprite = Timer(self.font, (700, 115))
@@ -126,7 +127,9 @@ class Game():
 		self.mechanics = RandomEvents(self, self.eq, self.board, self.screen)
 
 		self.clock = pygame.time.Clock()
-		if(self.level == EXTREME): self.speed *= 2
+		if(self.level == EXTREME):
+			self.speed *= 2
+			self.ospeed *= 2
 		self.running = True
 		self.quit = False
 
@@ -220,19 +223,19 @@ class Game():
 				if event.key == K_UP:
 					self.eq.board.rotate_tetrimo_L()
 				elif event.key == K_DOWN:
-					self.speed = 4.50
+					self.speed = self.ospeed*4.50
 				elif event.key == K_LEFT:
 					self.eq.move_left()
 				elif event.key == K_RIGHT:
 					self.eq.move_right()
 			elif event.type == KEYUP:
 				if event.key == K_DOWN:
-					self.speed = 1.00
+					self.speed = self.ospeed
 		else:
 			if(event.type == KEYDOWN):
 				if event.key == K_UP:
 					if self.eq.tet.direction == NORTH:
-						self.speed = 4.50
+						self.speed = self.ospeed*4.50
 					elif self.eq.tet.direction == SOUTH:
 						self.eq.board.rotate_tetrimo_L()
 					elif self.eq.tet.direction == WEST:
@@ -243,7 +246,7 @@ class Game():
 					if self.eq.tet.direction == NORTH:
 						self.eq.board.rotate_tetrimo_L()
 					elif self.eq.tet.direction == SOUTH:
-						self.speed = 4.50
+						self.speed = self.ospeed*4.50
 					elif self.eq.tet.direction == WEST:
 						self.eq.move_right()
 					else:
@@ -254,7 +257,7 @@ class Game():
 					elif self.eq.tet.direction == SOUTH:
 						self.eq.move_left()
 					elif self.eq.tet.direction == WEST:
-						self.speed = 4.50
+						self.speed = self.ospeed*4.50
 					else:
 						self.eq.board.rotate_tetrimo_L()
 				elif event.key == K_RIGHT:
@@ -265,23 +268,26 @@ class Game():
 					elif self.eq.tet.direction == WEST:
 						self.eq.board.rotate_tetrimo_L()
 					else:
-						self.speed = 4.50
+						self.speed = self.ospeed*4.50
 			elif event.type == KEYUP:
 				if event.key == K_UP and self.eq.tet.direction == NORTH:
-					self.speed = 1.00
+					self.speed = self.ospeed
 				elif event.key == K_DOWN and self.eq.tet.direction == SOUTH:
-					self.speed = 1.00
+					self.speed = self.ospeed
 				elif event.key == K_LEFT and self.eq.tet.direction == WEST:
-					self.speed = 1.00
+					self.speed = self.ospeed
 				elif event.key == K_RIGHT and self.eq.tet.direction == EAST:
-					self.speed = 1.00
+					self.speed = self.ospeed
 		if event.type == KEYDOWN:
 			if event.key == K_p or event.key == K_ESCAPE:
 				self.pause()
+				self.speed = self.ospeed
 			elif event.key == K_LSHIFT:
 				self.eq.shift()
+				self.speed = self.ospeed
 			elif event.key == K_SPACE:
 				self.board.drop()
+				self.speed = self.ospeed
 			elif event.key == K_z:
 				self.eq.board.rotate_tetrimo_L()
 			elif event.key == K_x:

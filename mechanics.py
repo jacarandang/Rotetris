@@ -26,11 +26,13 @@ class RandomEvents():
 		self.doge_img = load_image("doge.png")
 		self.running = False
 
+		self.bark = pygame.mixer.music.load(path.join("resource", "music", "bark.ogg"))
 		self.events = [self.speed_up, self.speed_down, self.doge, self.board_rotate]
-
-		self.chance = 50
+		self.chance = 40
 		if(self.game.level == NORMAL): self.chance = 10
 		elif(self.game.level == HARD): self.chance = 25
+		elif(self.game.level == EXTREME):
+			self.events.append(self.tetrimo_rotate)
 		self.timer = 0
 
 	def run(self):
@@ -55,6 +57,7 @@ class RandomEvents():
 	def doge(self):
 		self.eq.pauseG()
 		self.screen.blit(self.doge_img, (0, 0))
+		pygame.mixer.music.play()
 		pygame.display.update()
 		sleep(1)
 		self.eq.playG()
@@ -66,11 +69,15 @@ class RandomEvents():
 		choice([self.board.rotateL, self.board.rotateR])()
 
 	def speed_up(self):
-		self.game.speed *= 3.00
+		self.game.ospeed *= 2.00
+		self.game.speed = self.game.ospeed
 		sleep(5)
-		self.game.speed /= 3.00
+		self.game.ospeed /= 2.00
+		self.game.speed = self.game.ospeed
 
 	def speed_down(self):
-		self.game.speed /= 2.00
+		self.game.ospeed /= 2.00
+		self.game.speed = self.game.ospeed
 		sleep(5)
-		self.game.speed *= 2.00
+		self.game.ospeed *= 2.00
+		self.game.speed = self.game.ospeed
