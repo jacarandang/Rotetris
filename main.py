@@ -40,8 +40,7 @@ def load_level(diff):
 	g = Game(diff, SCR)
 	BGM.stop()
 	t = Thread(target = g.start)
-	t.start()
-	t.join()
+	g.start()
 	BGM.play()
 
 class MainObjects():

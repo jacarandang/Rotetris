@@ -47,6 +47,15 @@ class Board():
 					self.place(t)
 					self.tetrimo.remove(t)
 	
+	def rotate_tetrimo_L(self):
+		for t in self.tetrimo:
+			t.rotateL()
+			i = t.topleft[0]
+			j = t.topleft[1]
+			
+
+	def rotate_tetrimo_R(self):
+		pass
 	def remove(self, t):
 		self.tetrimo.remove(t)
 
@@ -156,12 +165,6 @@ class Board():
 				narr[j][BSIZE-1-i] = self[i][j]
 				
 		self.board = narr
-		
-	def rotate_tetrimo_L(self):
-		pass
-
-	def rotate_tetrimo_R(self):
-		pass
 		
 class Tetrimo():
 

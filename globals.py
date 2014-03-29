@@ -43,3 +43,4 @@ class Options:
 		opt = pickle.load(f)
 		self.volume = opt.volume
 		self.control = opt.control
+		self.highscore = opt.highscore
