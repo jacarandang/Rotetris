@@ -19,6 +19,9 @@ def load_image(file, colorkey = None):
 		surf.set_colorkey(colorkey, RLEACCEL)
 	return surf
 
+def foo():
+	pass
+
 class EventQ():
 
 	def __init__(self, board, level, holdSp = None):
@@ -123,8 +126,9 @@ class Game():
 		self.mechanics = RandomEvents(self, self.eq, self.board, self.screen)
 
 		self.clock = pygame.time.Clock()
-		if(self.level > NORMAL): self.speed *= 2
+		if(self.level == EXTREME): self.speed *= 2
 		self.running = True
+		self.quit = False
 
 		self.timer = time()
 
@@ -132,7 +136,7 @@ class Game():
 		tthread = self.tsprite.start()
 		if(self.level > EASY): mthread = self.mechanics.start()
 
-		while(self.running):
+		while(self.running and not self.quit):
 			self.clock.tick(FPS)
 
 			if(time() - self.timer >= 1/self.speed):
@@ -169,6 +173,7 @@ class Game():
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				self.running = False
+				self.quit = True
 			elif event.type == KEYDOWN or event.type == KEYUP:
 				self.keydown(event)
 
@@ -176,16 +181,37 @@ class Game():
 		bg = self.screen.copy()
 		olay = pygame.Surface(bg.get_size()).convert_alpha()
 		olay.fill((0, 0, 0, 100))
+
+		resume = pygame.image.load(path.join("resource", "Start.png")).convert_alpha()
+		resumeb = Button(resume, (400, 250), foo)
+
+		quit = pygame.image.load(path.join("resource", "Quit.png")).convert_alpha()
+		quitb = Button(quit, (400, 350), foo)
+
+		tsprite = pygame.sprite.Group()
+		tsprite.add(resumeb, quitb)
+
 		while(True):
 			for event in pygame.event.get():
 				if event.type == QUIT:
+					self.quit = True
 					return
 				elif event.type == KEYDOWN:
 					if event.key == K_p or event.key == K_ESCAPE:
 						return
+				elif event.type == MOUSEBUTTONDOWN:
+					for sprite in tsprite:
+						c = sprite.click()
+						if(c and sprite == resumeb):
+							return
+						elif c and sprite == quitb:
+							self.quit = True
+							return
+			tsprite.update()
 
 			self.screen.blit(bg, (0, 0))
 			self.screen.blit(olay, (0, 0))
+			tsprite.draw(self.screen)
 			pygame.display.flip()
 	
 	def keydown(self, event):

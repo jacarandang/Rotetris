@@ -75,6 +75,8 @@ class Button(pygame.sprite.Sprite):
 	def click(self):
 		if(self.rect.collidepoint(pygame.mouse.get_pos())):
 			self.action()
+			return True
+		return False
 
 class Timer(pygame.sprite.Sprite):
 

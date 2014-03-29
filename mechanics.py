@@ -6,6 +6,8 @@ from threading import Thread
 from time import *
 from random import randint, choice
 
+from globals import *
+
 def load_image(file, colorkey = None):
 	surf = pygame.image.load(path.join('resource', file)).convert()
 	if colorkey is not None:
@@ -26,6 +28,9 @@ class RandomEvents():
 
 		self.events = [self.speed_up, self.speed_down, self.doge, self.board_rotate]
 
+		self.chance = 50
+		if(self.game.level == NORMAL): self.chance = 10
+		elif(self.game.level == HARD): self.chance = 25
 		self.timer = 0
 
 	def run(self):
@@ -33,7 +38,7 @@ class RandomEvents():
 			sleep(1)
 			if(time() - self.timer > 10):
 				n = randint(1, 100)
-				if(n <= 50):
+				if(n <= self.chance):
 					choice(self.events)()
 				self.timer = time()
 
