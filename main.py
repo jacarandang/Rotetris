@@ -43,6 +43,9 @@ def load_level(diff):
 	g.start()
 	BGM.play()
 
+def change_vol(command):
+	command()
+	BGM.set_volume(settings["volume"])
 class MainObjects():
 
 	def __init__(self, default):
@@ -123,21 +126,23 @@ class _OptionsPG(pygame.sprite.Sprite):
 optionspg = _OptionsPG()
 
 low = load_image("Low.png")
-lowb = Button(low, (200, 375), None)
+lowb = Button(low, (200, 375), lambda: change_vol(low_vol))
 
 med = load_image("Med.png")
-medb = Button(med, (400, 375), None)
+medb = Button(med, (400, 375), lambda: change_vol(med_vol))
 
 high = load_image("High.png")
-highb = Button(high, (600, 375), None)
+highb = Button(high, (600, 375), lambda: change_vol(high_vol))
 
 relative = load_image("Relative.png")
-relativeb = Button(relative, (200, 175), None)
+relativeb = Button(relative, (200, 175), relative_control)
 
 absolute = load_image("Absolute.png")
-absoluteb = Button(absolute, (575, 230), None)
+absoluteb = Button(absolute, (575, 230), absolute_control)
 
-optionoptions.add(optionspg, lowb, medb, highb, relativeb, absoluteb)
+save = load_image("Save.png")
+saveb = Button(save, (700, 565), save_settings)
+optionoptions.add(optionspg, lowb, medb, highb, relativeb, absoluteb, backb, saveb)
 
 allsprites = pygame.sprite.Group()
 

@@ -107,10 +107,11 @@ class Game():
 
 		self.font = pygame.font.Font(path.join("resource", "font", "arro_terminal.ttf"), 30)
 		self.tsprite = Timer(self.font, (700, 115))
-		self.lcsprite = Text(self.font, lambda: self.board.lineclears, (700, 260))
-		self.mdsprite = Text(self.font, lambda: MODETEXT[self.level], (700, 330))
-		self.spsprite = Text(self.font, lambda: self.speed, (700, 375))
-		self.allsprite.add(self.tsprite, self.lcsprite, self.mdsprite, self.spsprite)
+		self.lcsprite = Text(self.font, lambda: self.board.lineclears, (700, 260))		#lineclear
+		self.mdsprite = Text(self.font, lambda: MODETEXT[self.level], (700, 330))		#level
+		self.spsprite = Text(self.font, lambda: self.speed, (700, 375))					#speed
+		self.hssprite = Text(self.font, lambda: settings["highscore"][self.level], (700, 185))
+		self.allsprite.add(self.tsprite, self.lcsprite, self.mdsprite, self.spsprite, self.hssprite)
 
 		self.holdSprite = Hold()
 		self.allsprite.add(self.holdSprite)
@@ -158,6 +159,9 @@ class Game():
 		if(self.level > EASY): mthread.join()
 		if(self.board.is_over()):
 			self.gameover()
+			if self.board.lineclears > settings["highscore"][self.level]:
+				settings["highscore"][self.level] = self.board.lineclears
+				save_settings()
 		self.bgm.stop()
 
 	def event(self):
@@ -184,7 +188,7 @@ class Game():
 			pygame.display.flip()
 	
 	def keydown(self, event):
-		if(self.level == HARD or self.level == EXTREME):
+		if(settings["control"] == 1):
 			if(event.type == KEYDOWN):
 				if event.key == K_UP:
 					self.eq.board.rotate_tetrimo_L()

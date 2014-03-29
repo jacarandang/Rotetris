@@ -26,36 +26,29 @@ EXTREME = 3
 
 MODETEXT = ["EASY", "NORMAL", "HARD", "INSANE"]
 
-class Options:
+settings = {"volume": 1, "control": 0, "highscore": [10, 10, 10, 10]}
 
-	def __init__(self):
-		self.volume = 1
-		self.control = 0
-		self.highscore = [0, 0, 0, 0]
-		self.load()
+def load_settings():
+	f = file("config.cfg", "r")
+	return pickle.load(f)
 
-	def save(self):
-		f = file("config.cfg", "w")
-		pickle.dump(self, f)
+def save_settings():
+	f = file("config.cfg", "w")
+	pickle.dump(settings, f)
 
-	def load(self):
-		f = file("config.cfg", "r")
-		opt = pickle.load(f)
-		self.volume = opt.volume
-		self.control = opt.control
-		self.highscore = opt.highscore
+settings = load_settings()
 
-	def low_vol(self):
-		self.volume = .25
+def low_vol():
+	settings["volume"] = .25
 
-	def med_vol(self):
-		self.volume = .50
+def med_vol():
+	settings["volume"] = .50
 
-	def high_vol(self):
-		self.volume = 1
+def high_vol():
+	settings["volume"] = 1
 
-	def relative_control(self):
-		self.control = 0
+def relative_control():
+	settings["control"] = 0
 
-	def absolute_control(self):
-		self.control = 1
+def absolute_control():
+	settings["control"] = 1

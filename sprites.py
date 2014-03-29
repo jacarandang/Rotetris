@@ -45,8 +45,10 @@ class BoardSprite(Board, pygame.sprite.Sprite):
 
 class Button(pygame.sprite.Sprite):
 
-	def __init__(self, image, (x, y), action):
+	def __init__(self, image, (x, y), action, selected = False):
 		pygame.sprite.Sprite.__init__(self)
+		if(selected):
+			image = pygame.transform.scale(image, (image.get_width()+20, image.get_height()+20))
 		self.bimage = image
 		self.image = image.copy()
 		self.rect = self.image.get_rect()
