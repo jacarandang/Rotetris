@@ -168,13 +168,20 @@ class Game():
 				self.keydown(event)
 
 	def pause(self):
+		bg = self.screen.copy()
+		olay = pygame.Surface(bg.get_size()).convert_alpha()
+		olay.fill((0, 0, 0, 100))
 		while(True):
 			for event in pygame.event.get():
 				if event.type == QUIT:
 					return
 				elif event.type == KEYDOWN:
-					if event.key == K_p:
+					if event.key == K_p or event.key == K_ESCAPE:
 						return
+
+			self.screen.blit(bg, (0, 0))
+			self.screen.blit(olay, (0, 0))
+			pygame.display.flip()
 	
 	def keydown(self, event):
 		if(self.level == HARD or self.level == EXTREME):
