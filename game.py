@@ -178,9 +178,9 @@ class Game():
 				self.keydown(event)
 
 	def pause(self):
-		bg = self.screen.copy()
-		olay = pygame.Surface(bg.get_size()).convert_alpha()
-		olay.fill((0, 0, 0, 100))
+		bg = load_image("Pausepg.png")
+		olay = pygame.Surface((800, 600)).convert_alpha()
+		olay.fill((0, 0, 0, 120))
 
 		resume = pygame.image.load(path.join("resource", "Start.png")).convert_alpha()
 		resumeb = Button(resume, (400, 250), foo)
