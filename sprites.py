@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 
 from classes import *
+from globals import *
 
 from threading import Thread
 from time import time, sleep
@@ -134,6 +135,21 @@ class Hold(pygame.sprite.Sprite):
 
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
+		self.hold = None
+		self.image = pygame.Surface((BWIDTH*4, BWIDTH*4)).convert_alpha()
+		self.image.fill((255, 255, 255, 0))
+		self.rect = self.image.get_rect()
+		self.rect.center = 700, 500
 
 	def update(self):
 		pass
+
+	def render(self, layout):
+		w = layout[4]
+		h = layout[5]
+		self.image = pygame.Surface((BWIDTH*w - 1, BWIDTH*h - 1)).convert_alpha()
+		self.image.fill((255, 255, 255, 0))
+		for i in xrange(4):
+			self.image.fill(layout[6], pygame.Rect(layout[i][1]*BWIDTH, layout[i][0]*BWIDTH, BWIDTH-1, BWIDTH - 1))
+		self.rect = self.image.get_rect()
+		self.rect.center = 700, 500

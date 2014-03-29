@@ -21,7 +21,7 @@ def load_image(file, colorkey = None):
 
 class EventQ():
 
-	def __init__(self, board, level):
+	def __init__(self, board, level, holdSp = None):
 		self.board = board
 		self.board.eq = self
 		self.tet = None
@@ -34,7 +34,7 @@ class EventQ():
 		
 		self.hshift =  False
 		self.hold  =  None
-
+		self.holdSp = holdSp
 		self.pause = False
 
 	def next_tetrimo(self, layout = None):
@@ -68,12 +68,15 @@ class EventQ():
 				self.board.remove(self.tet)
 				self.next_tetrimo(tmp)
 				self.hshift = True
+				if(self.holdSp):
+					self.holdSp.render(self.hold)
 
 			else:
 				self.hold = self.tet.ttype
 				self.board.remove(self.tet)
 				self.next_tetrimo()
 				self.hshift = True
+				if(self.holdSp): self.holdSp.render(self.hold)
 
 	def pauseG(self):
 		self.pause = True
@@ -108,7 +111,10 @@ class Game():
 		self.spsprite = Text(self.font, lambda: self.speed, (700, 375))
 		self.allsprite.add(self.tsprite, self.lcsprite, self.mdsprite, self.spsprite)
 
-		self.eq = EventQ(self.board, level)
+		self.holdSprite = Hold()
+		self.allsprite.add(self.holdSprite)
+
+		self.eq = EventQ(self.board, level, self.holdSprite)
 		self.eq.next_tetrimo()
 
 		self.mechanics = RandomEvents(self, self.eq, self.board, self.screen)
