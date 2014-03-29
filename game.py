@@ -93,7 +93,8 @@ class Game():
 		self.bg = load_image("Board.png")
 		self.bgm = pygame.mixer.Sound(path.join("resource", "music", "dubstep.ogg"))
 		self.bgm.play(-1)
-		
+		self.bgm.set_volume(settings["volume"])
+
 		o = load_image("overlay.png").convert()
 		o = pygame.transform.scale(o, (BWIDTH - 1, BWIDTH - 1))
 		o.set_alpha(100)
