@@ -61,6 +61,7 @@ class MainObjects():
 baseoptions = pygame.sprite.Group()
 startoptions = pygame.sprite.Group()
 creditsoptions = pygame.sprite.OrderedUpdates()
+optionoptions = pygame.sprite.OrderedUpdates()
 mainobject = MainObjects(baseoptions)
 
 clock = pygame.time.Clock()
@@ -73,7 +74,7 @@ start = load_image('Start.png')
 startb = Button(start, (400, 275), lambda: mainobject.set(startoptions))
 
 option = load_image("Options.png")
-optionb = Button(option, (400, 350), None)
+optionb = Button(option, (400, 350), lambda: mainobject.set(optionoptions))
 
 credit = load_image("Credits.png")
 creditb = Button(credit, (400, 425), lambda: mainobject.set(creditsoptions))
@@ -112,6 +113,31 @@ creditspg = _CreditsPg()
 
 creditsoptions.add(creditspg, backb)
 #---------------------------------------
+#options
+class _OptionsPG(pygame.sprite.Sprite):
+
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = load_image("Optionpg.png")
+		self.rect = self.image.get_rect()
+optionspg = _OptionsPG()
+
+low = load_image("Low.png")
+lowb = Button(low, (200, 375), None)
+
+med = load_image("Med.png")
+medb = Button(med, (400, 375), None)
+
+high = load_image("High.png")
+highb = Button(high, (600, 375), None)
+
+relative = load_image("Relative.png")
+relativeb = Button(relative, (200, 175), None)
+
+absolute = load_image("Absolute.png")
+absoluteb = Button(absolute, (575, 230), None)
+
+optionoptions.add(optionspg, lowb, medb, highb, relativeb, absoluteb)
 
 allsprites = pygame.sprite.Group()
 

@@ -29,7 +29,7 @@ MODETEXT = ["EASY", "NORMAL", "HARD", "INSANE"]
 class Options:
 
 	def __init__(self):
-		self.volume = .5
+		self.volume = 1
 		self.control = 0
 		self.highscore = [0, 0, 0, 0]
 		self.load()
@@ -44,3 +44,18 @@ class Options:
 		self.volume = opt.volume
 		self.control = opt.control
 		self.highscore = opt.highscore
+
+	def low_vol(self):
+		self.volume = .25
+
+	def med_vol(self):
+		self.volume = .50
+
+	def high_vol(self):
+		self.volume = 1
+
+	def relative_control(self):
+		self.control = 0
+
+	def absolute_control(self):
+		self.control = 1
