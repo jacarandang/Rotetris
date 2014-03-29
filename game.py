@@ -99,12 +99,14 @@ class Game():
 		self.allsprite = pygame.sprite.Group()
 		self.board = BoardSprite()
 		self.allsprite.add(self.board)
+		self.speed = 1.00
 
 		self.font = pygame.font.Font(path.join("resource", "font", "arro_terminal.ttf"), 30)
 		self.tsprite = Timer(self.font, (700, 115))
 		self.lcsprite = Text(self.font, lambda: self.board.lineclears, (700, 260))
 		self.mdsprite = Text(self.font, lambda: MODETEXT[self.level], (700, 330))
-		self.allsprite.add(self.tsprite, self.lcsprite, self.mdsprite)
+		self.spsprite = Text(self.font, lambda: self.speed, (700, 375))
+		self.allsprite.add(self.tsprite, self.lcsprite, self.mdsprite, self.spsprite)
 
 		self.eq = EventQ(self.board, level)
 		self.eq.next_tetrimo()
@@ -112,14 +114,14 @@ class Game():
 		self.mechanics = RandomEvents(self, self.eq, self.board, self.screen)
 
 		self.clock = pygame.time.Clock()
-		self.speed = 1.00
+		if(self.level > NORMAL): self.speed *= 2
 		self.running = True
 
 		self.timer = time()
 
 	def start(self):
 		tthread = self.tsprite.start()
-		mthread = self.mechanics.start()
+		if(self.level > EASY): mthread = self.mechanics.start()
 
 		while(self.running):
 			self.clock.tick(FPS)
@@ -146,9 +148,10 @@ class Game():
 		self.tsprite.stop()
 		self.mechanics.stop()
 		tthread.join()
-		mthread.join()
+		if(self.level > EASY): mthread.join()
 		if(self.board.is_over()):
 			self.gameover()
+		self.bgm.stop()
 
 	def event(self):
 		for event in pygame.event.get():
@@ -172,14 +175,14 @@ class Game():
 				if event.key == K_UP:
 					self.eq.tet.rotateL()
 				elif event.key == K_DOWN:
-					self.speed *= 4.50
+					self.speed = 4.50
 				elif event.key == K_LEFT:
 					self.eq.move_left()
 				elif event.key == K_RIGHT:
 					self.eq.move_right()
 			elif event.type == KEYUP:
 				if event.key == K_DOWN:
-					self.speed /= 4.50
+					self.speed = 1.00
 		else:
 			if(event.type == KEYDOWN):
 				if event.key == K_UP:
@@ -228,7 +231,7 @@ class Game():
 				elif event.key == K_RIGHT and self.eq.tet.direction == EAST:
 					self.speed = 1.00
 		if event.type == KEYDOWN:
-			if event.key == K_p:
+			if event.key == K_p or event.key == K_ESCAPE:
 				self.pause()
 			elif event.key == K_LSHIFT:
 				self.eq.shift()

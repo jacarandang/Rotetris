@@ -1,3 +1,5 @@
+import pickle
+
 BSIZE = 16
 BWIDTH = 37
 
@@ -23,3 +25,20 @@ HARD = 2
 EXTREME = 3
 
 MODETEXT = ["EASY", "NORMAL", "HARD", "INSANE"]
+
+class Options:
+
+	def __init__(self):
+		self.volume = .5
+		self.control = 0
+		self.load()
+
+	def save(self):
+		f = file("config.cfg", "w")
+		pickle.dump(self, f)
+
+	def load(self):
+		f = file("config.cfg", "r")
+		opt = pickle.load(f)
+		self.volume = opt.volume
+		self.control = opt.control

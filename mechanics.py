@@ -24,7 +24,7 @@ class RandomEvents():
 		self.doge_img = load_image("doge.png")
 		self.running = False
 
-		self.events = [self.speed_up]
+		self.events = [self.speed_up, self.speed_down, self.doge, self.board_rotate]
 
 		self.timer = 0
 
@@ -32,9 +32,8 @@ class RandomEvents():
 		while(self.running):
 			sleep(1)
 			if(time() - self.timer > 10):
-				print "evnet"
 				n = randint(1, 100)
-				if(n <= 100):
+				if(n <= 50):
 					choice(self.events)()
 				self.timer = time()
 
@@ -67,4 +66,6 @@ class RandomEvents():
 		self.game.speed /= 3.00
 
 	def speed_down(self):
-		pass
+		self.game.speed /= 2.00
+		sleep(5)
+		self.game.speed *= 2.00

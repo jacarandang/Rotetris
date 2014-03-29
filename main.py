@@ -37,9 +37,12 @@ BGM = pygame.mixer.Sound(path.join('resource', 'music', 'track1.ogg'))
 BGM.play(-1)
 
 def load_level(diff):
-	BGM.stop()
 	g = Game(diff, SCR)
-	g.start()
+	BGM.stop()
+	t = Thread(target = g.start)
+	t.start()
+	t.join()
+	BGM.play()
 
 class MainObjects():
 
@@ -86,13 +89,13 @@ easy = load_image("Easy.png")
 easyb = Button(easy, (400, 275), lambda: load_level(EASY))
 
 normal = load_image("Normal.png")
-normalb = Button(normal, (400, 350), lambda: Game(NORMAL, SCR).start())
+normalb = Button(normal, (400, 350), lambda: load_level(NORMAL))
 
 hard = load_image("Hard.png")
-hardb = Button(hard, (400, 425), lambda: Game(HARD, SCR).start())
+hardb = Button(hard, (400, 425), lambda: load_level(HARD))
 
 insane = load_image("Insane.png")
-insaneb = Button(insane, (400, 500), lambda: Game(EXTREME, SCR).start())
+insaneb = Button(insane, (400, 500), lambda: load_level(EXTREME))
 
 back = load_image("Back.png")
 backb = Button(back, (100, 565), lambda: mainobject.set(baseoptions))
