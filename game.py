@@ -24,12 +24,13 @@ def foo():
 
 class EventQ():
 
-	def __init__(self, board, level, holdSp = None):
+	def __init__(self, board, level, game, holdSp = None):
 		self.board = board
 		self.board.eq = self
 		self.tet = None
 		self.alist = []
 		self.level = level
+		self.game = game
 		for i in xrange(4):
 			self.alist.append(load_image(D_LIST[i][2], -1))
 			self.alist[i].set_alpha(150)
@@ -42,6 +43,7 @@ class EventQ():
 
 	def next_tetrimo(self, layout = None):
 		self.tet = None
+		self.game.speed = self.game.ospeed
 		if not layout:
 			if(self.level == EASY):
 				self.tet = Tetrimo(choice(B_LIST), (self.board.spawn+1, self.board.spawn+1), choice([NORTH, SOUTH]))
@@ -121,7 +123,7 @@ class Game():
 		self.holdSprite = Hold()
 		self.allsprite.add(self.holdSprite)
 
-		self.eq = EventQ(self.board, level, self.holdSprite)
+		self.eq = EventQ(self.board, level, self, self.holdSprite)
 		self.eq.next_tetrimo()
 
 		self.mechanics = RandomEvents(self, self.eq, self.board, self.screen)
