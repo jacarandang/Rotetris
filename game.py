@@ -301,17 +301,3 @@ class Game():
 		self.screen.blit(img, (0, 0))
 		pygame.display.update()
 		sleep(3)
-
-if __name__ == '__main__':
-
-	pygame.init()
-	pygame.font.init()
-	pygame.key.set_repeat(100, 70)
-
-	SCREEN = pygame.display.set_mode((800, 600))
-	FONT = pygame.font.Font(None, 30)
-	
-	g = Game(EASY, SCREEN)
-	g.start()
-	
-	pygame.quit()
