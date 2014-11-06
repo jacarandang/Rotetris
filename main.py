@@ -43,6 +43,7 @@ def load_level(diff):
 	t = Thread(target = g.start)
 	g.start()
 	BGM.play()
+	pygame.event.get()
 
 def change_vol(command):
 	command()
@@ -176,9 +177,13 @@ while(mainobject.running):
 				mainobject.set(baseoptions)
 		elif event.type == MOUSEBUTTONDOWN:
 			if event.button == 1:
+				clicked = False
 				for sp in mainobject.get():
 					if isinstance(sp, Button):
-						sp.click()
+						if sp.click():
+							clicked = True
+							break
+				if clicked: break
 
 	if(time() - arrow_timer >= .75):
 		arrow_ang += choice([90, 180, 270])
