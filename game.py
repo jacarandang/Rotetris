@@ -173,6 +173,7 @@ class Game():
 				settings["highscore"][self.level] = self.board.lineclears
 				save_settings()
 		self.bgm.stop()
+		pygame.event.get() #bug fix
 		return 
 
 	def event(self):

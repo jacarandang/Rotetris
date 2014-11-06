@@ -66,6 +66,7 @@ baseoptions = pygame.sprite.Group()
 startoptions = pygame.sprite.Group()
 creditsoptions = pygame.sprite.OrderedUpdates()
 optionoptions = pygame.sprite.OrderedUpdates()
+instructionoptions = pygame.sprite.OrderedUpdates()
 mainobject = MainObjects(baseoptions)
 
 clock = pygame.time.Clock()
@@ -75,18 +76,21 @@ def start_game(difficulty):
 
 #Main Menu
 start = load_image('Start.png')
-startb = Button(start, (400, 275), lambda: mainobject.set(startoptions))
+startb = Button(start, (400, 250), lambda: mainobject.set(startoptions))
 
 option = load_image("Options.png")
-optionb = Button(option, (400, 350), lambda: mainobject.set(optionoptions))
+optionb = Button(option, (400, 325), lambda: mainobject.set(optionoptions))
 
 credit = load_image("Credits.png")
-creditb = Button(credit, (400, 425), lambda: mainobject.set(creditsoptions))
+creditb = Button(credit, (400, 400), lambda: mainobject.set(creditsoptions))
+
+instruction = load_image("Instructions.png")
+instructionb = Button(instruction, (400, 475), lambda: mainobject.set(instructionoptions))
 
 exit = load_image("Exit.png")
-exitb = Button(exit, (400, 500), lambda: mainobject.stop())
+exitb = Button(exit, (400, 550), lambda: mainobject.stop())
 
-baseoptions.add(startb, optionb, creditb, exitb)
+baseoptions.add(startb, optionb, creditb, instructionb, exitb)
 #-------------------------------------
 #start menu
 easy = load_image("Easy.png")
@@ -144,6 +148,20 @@ absoluteb = Button(absolute, (575, 230), absolute_control)
 save = load_image("Save.png")
 saveb = Button(save, (700, 565), save_settings)
 optionoptions.add(optionspg, lowb, medb, highb, relativeb, absoluteb, backb, saveb)
+
+#---------------------------------------
+#instructions
+class _InstructionsPG(pygame.sprite.Sprite):
+	
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = load_image("Instructionpage.png")
+		self.rect = self.image.get_rect()
+instructionspg = _InstructionsPG()
+
+i_start = load_image("Start.png")
+i_startb = Button(i_start, (700, 565), lambda: mainobject.set(startoptions))
+instructionoptions.add(instructionspg,backb, i_startb)
 
 allsprites = pygame.sprite.Group()
 
